@@ -18,7 +18,7 @@ const web3 = new Web3(provider);
 
 	//deploy the contract and print address:
 	const initialMessage = "Hi";
-	const transaction = await new web3.eth.Contract(JSON.parse(interface))
+	const contract = await new web3.eth.Contract(JSON.parse(interface))
 		.deploy({
 			data: bytecode,
 			arguments: [initialMessage],
@@ -28,7 +28,7 @@ const web3 = new Web3(provider);
 			from: account,
 		});
 
-	console.log(`Contract deployed to address : ${transaction.options.address}`);
+	console.log(`Contract deployed to address : ${contract.options.address}`);
 
 	//stop the provider engine to prevent script from hanging post deployment
 	provider.engine.stop();

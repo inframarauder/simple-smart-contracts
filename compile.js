@@ -16,4 +16,5 @@ function getContractSource(contractName) {
 //compile and export contract source
 const contractSource = getContractSource("Inbox");
 const compiledContractSource = solc.compile(contractSource, 1);
+console.log(`Generated compiled contracts`);
 module.exports = compiledContractSource.contracts[":Inbox"]; //exporting only the inbox contract for now
