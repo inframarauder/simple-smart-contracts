@@ -4,8 +4,8 @@ A simple inbox smart contract that can be used to store and update a message.
 
 **Scripts**
 
-`compile.js` : compile the contract to bytecode and ABI using solc compiler
-`deploy.js` : deploy the contract to the ethereum (rinkeby) network and prints the address of the deployed contract
+- `compile.js` : compile the contract to bytecode and ABI using solc compiler
+- `deploy.js` : deploy the contract to the ethereum (rinkeby) network and prints the address of the deployed contract
 
 **Steps**
 
