@@ -1,20 +1,22 @@
 # simple-smart-contract
 
-A simple inbox smart contract that can be used to store and update a message.
+A collection of simple smart contracts.
 
-**Scripts**
+## Contracts
+
+- `Inbox.sol` : simple inbox contract to store and retrieve a message.
+- `Lottery.sol` : a full fledged lottery contract that picks winners in a pseudo-random manner.
+
+## Scripts
 
 - `compile.js` : compile the contract to bytecode and ABI using solc compiler
 - `deploy.js` : deploy the contract to the ethereum (rinkeby) network and prints the address of the deployed contract
 
-**Steps**
+## Steps
 
 - Install depenedencies : `npm install`
 - To test the contract, run the following commands:
   `npm run test`
-
-- To compile the contract, run the following command:
-  `npm run compile`
 
 - To deploy the contract, create a `.env` file and set the following variables:
 

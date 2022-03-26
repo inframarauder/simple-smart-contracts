@@ -34,7 +34,7 @@ contracts.forEach(async (contract, index) => {
 	//deploy the contract and print address:
 	const deployedContract = await new web3.eth.Contract(abi)
 		.deploy({ data: evm.bytecode.object, arguments: [...contract.arguments] })
-		.send({ gas: "1000", from: account });
+		.send({ gas: "100000", from: account });
 
 	console.log(
 		`Contract ${contract.name} deployed to address : ${deployedContract.options.address}`
