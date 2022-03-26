@@ -1,7 +1,8 @@
 require("dotenv").config();
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 const Web3 = require("web3");
-const { abi, evm } = require("./compile");
+const uuid = require("uuid").v4;
+const compileContract = require("./compile");
 
 //setup HD-Wallet provider:
 const accountMnemonic = process.env.ACCOUNT_MNEMONIC;
@@ -11,23 +12,34 @@ const provider = new HDWalletProvider(accountMnemonic, infuraBaseUrl);
 //setup web3 instance:
 const web3 = new Web3(provider);
 
-(async () => {
+//list of contracts to deploy:
+const contracts = [
+	{
+		name: "Inbox",
+		arguments: ["Hi"],
+	},
+	{
+		name: "Lottery",
+		arguments: [uuid()],
+	},
+];
+contracts.forEach(async (contract, index) => {
+	//compile contract:
+	const { abi, evm } = compileContract(contract.name);
+
 	//get list of accounts from provider
-	const account = (await web3.eth.getAccounts())[0];
+	const account = (await web3.eth.getAccounts())[index];
 	console.log(`Using account ${account} for deployment....`);
 
 	//deploy the contract and print address:
-	const contract = await new web3.eth.Contract(JSON.parse(abi))
-		.deploy({
-			data: evm.bytecode.object,
-		})
-		.send({
-			gas: "1000000",
-			from: account,
-		});
+	const deployedContract = await new web3.eth.Contract(abi)
+		.deploy({ data: evm.bytecode.object, arguments: [...contract.arguments] })
+		.send({ gas: "1000", from: account });
 
-	console.log(`Contract deployed to address : ${contract.options.address}`);
+	console.log(
+		`Contract ${contract.name} deployed to address : ${deployedContract.options.address}`
+	);
 
 	//stop the provider engine to prevent script from hanging post deployment
 	provider.engine.stop();
-})();
+});

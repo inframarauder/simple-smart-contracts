@@ -2,9 +2,10 @@ const assert = require("assert");
 const Web3 = require("web3");
 const ganache = require("ganache-cli");
 const uuid = require("uuid").v4;
-const { abi, evm } = require("../compile");
+const compileContract = require("../compile");
 
 const web3 = new Web3(ganache.provider({ gasLimit: "50000000" }));
+const { abi, evm } = compileContract("Lottery");
 
 let lottery, accounts;
 const defaultLotteryId = uuid();
