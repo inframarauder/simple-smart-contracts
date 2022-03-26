@@ -20,7 +20,7 @@ beforeEach(async () => {
 });
 
 describe("Inbox contract test block", () => {
-	it("deploys a contract", () => {
+	it("deploys a contract", async () => {
 		assert.ok(inbox.options.address);
 	});
 
