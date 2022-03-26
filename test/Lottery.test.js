@@ -16,7 +16,48 @@ beforeEach(async () => {
 });
 
 describe("Lottery Test Suite", () => {
-	it("deploys a contract", async() => {
+	it("deploys a contract", async () => {
 		assert.ok(lottery.options.address);
+	});
+
+	it("returns address of manager account", async () => {
+		const manager = await lottery.methods.getManager().call();
+		assert.equal(accounts[0], manager);
+	});
+
+	it("does not let manager enter the lottery", async () => {
+		try {
+			await lottery.methods.enterLottery().send({
+				from: accounts[0],
+				value: "100",
+			});
+		} catch (error) {
+			assert.equal(true, error.message.includes("Manager cant enter lottery"));
+		}
+	});
+
+	it("does not let a player enter the lottery with less than 100 wei", async () => {
+		try {
+			await lottery.methods.enterLottery().send({
+				from: accounts[1],
+				value: "10",
+			});
+		} catch (error) {
+			assert.equal(
+				true,
+				error.message.includes("Minimum 100 wei needed to enter")
+			);
+		}
+	});
+
+	it("allows a player to enter the lottery", async () => {
+		await lottery.methods.enterLottery().send({
+			from: accounts[1],
+			value: "100",
+		});
+
+		const players = await lottery.methods.getPlayers().call();
+		assert.equal(1, players.length);
+		assert.equal(accounts[1], players[0]);
 	});
 });
