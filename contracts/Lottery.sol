@@ -11,7 +11,7 @@ contract Lottery{
     }
 
     modifier restricted(){
-        require(msg.sender == manager);
+        require(msg.sender == manager ,"Only manager can call this method");
         _;
     }
 

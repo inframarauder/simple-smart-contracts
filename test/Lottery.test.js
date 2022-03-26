@@ -31,6 +31,7 @@ describe("Lottery Test Suite", () => {
 				from: accounts[0],
 				value: "100",
 			});
+			assert(false);
 		} catch (error) {
 			assert.equal(true, error.message.includes("Manager cant enter lottery"));
 		}
@@ -42,6 +43,7 @@ describe("Lottery Test Suite", () => {
 				from: accounts[1],
 				value: "10",
 			});
+			assert(false);
 		} catch (error) {
 			assert.equal(
 				true,
@@ -59,5 +61,19 @@ describe("Lottery Test Suite", () => {
 		const players = await lottery.methods.getPlayers().call();
 		assert.equal(1, players.length);
 		assert.equal(accounts[1], players[0]);
+	});
+
+	it("ensures that only manager can call pickWinner()", async () => {
+		try {
+			await lottery.methods.pickWinner().send({
+				from: accounts[1], //not manager account
+			});
+			assert(false);
+		} catch (error) {
+			assert.equal(
+				true,
+				error.message.includes("Only manager can call this method")
+			);
+		}
 	});
 });
