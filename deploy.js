@@ -23,23 +23,26 @@ const contracts = [
 		arguments: [uuid()],
 	},
 ];
-contracts.forEach(async (contract, index) => {
-	//compile contract:
-	const { abi, evm } = compileContract(contract.name);
 
+const main = async () => {
 	//get list of accounts from provider
-	const account = (await web3.eth.getAccounts())[index];
+	const account = (await web3.eth.getAccounts())[0]; //using 0th account everytime as other accounts have zero
 	console.log(`Using account ${account} for deployment....`);
 
-	//deploy the contract and print address:
-	const deployedContract = await new web3.eth.Contract(abi)
-		.deploy({ data: evm.bytecode.object, arguments: [...contract.arguments] })
-		.send({ gas: "100000", from: account });
+	//deploy all contracts
+	for (let contract of contracts) {
+		//compile contract:
+		const { abi, evm } = compileContract(contract.name);
+		//deploy the contract and print address:
+		const deployedContract = await new web3.eth.Contract(abi)
+			.deploy({ data: evm.bytecode.object, arguments: [...contract.arguments] })
+			.send({ gas: "5000000", from: account });
 
-	console.log(
-		`Contract ${contract.name} deployed to address : ${deployedContract.options.address}`
-	);
-
-	//stop the provider engine to prevent script from hanging post deployment
+		console.log(
+			`Contract ${contract.name} deployed to address : ${deployedContract.options.address}`
+		);
+	}
 	provider.engine.stop();
-});
+};
+
+main();
